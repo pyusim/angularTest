@@ -1,0 +1,26 @@
+{
+  "name": "angularTest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pyusim/angularTest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pyusim/angularTest/issues"
+  },
+  "homepage": "https://github.com/pyusim/angularTest#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-jasmine": "^1.1.0",
+    "grunt-contrib-jshint": "^1.1.0"
+  }
+}
