@@ -40,12 +40,13 @@ describe('Unit: Testing Services', function() {
 					'employee', '(', 'id', 'firstname', 'employeeType', '(', 'id', ')',
 					'lastname', ')', 'location', ')'];
 
-			var expected = [ 'id', 'created', 'employee', 
-					 [ 'id', 'firstname', 'employeeType', 
-					   [ 'id' ],
-					   'lastname' ], 
-					 'location' ];
-			
+			var expected = [ { label: 'id' }, 
+					 { label: 'created' }, 
+					 { label: 'employee',
+					   nodes : [ {label : 'id'}, {label : 'firstname'}, { label : 'employeeType', 
+											      nodes : [ { label: 'id' } ] }, { label: 'lastname' } ] },
+					 { label: 'location' } ];					       
+
 			console.log(input);
 			
 			var output = parserService.parseLabels(input);		      

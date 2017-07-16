@@ -1,17 +1,57 @@
 <html>
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-tree/2.22.5/angular-ui-tree.min.js"></script>
+  <link rel="stylesheet" type="text/css" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-tree/2.22.5/angular-ui-tree.min.css"></link>
+
   <link rel="stylesheet" href="./main.css">
   <script src="dist/app.js"></script>
+
+  <style>
+    ol {
+      list-style-type: none;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+  </style>
+
 </head>
 <body>
 
   <div ng-app="myApp">
     
     <div ng-controller = "mainController">
-      
-      <div class="color-blue">Hello World Again</div>
-      <div>{{showText}}</div>
+    
+      <form ng-submit="tokenizeAndParse()">
+	Enter your own well-formed string and press enter:
+	<input class="full-width" type="text" ng-model="input" ng-enter="parse()"><br>
+      </form>
+
+      <label>
+	<input type="radio" ng-model="sorted" ng-click="parse()" ng-value="true">
+	Sorted
+      </label><br/>
+      <label>
+	<input type="radio" ng-model="sorted" ng-click="parse()" ng-value="false">
+	Not sorted
+      </label><br/>
+  
+      <script type="text/ng-template" id="./nodes_renderer.html">
+	<div ui-tree-handle>
+	  {{node.label}}
+	</div>
+	<ol ui-tree-nodes="" ng-model="node.nodes">
+	  <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'./nodes_renderer.html'">
+	  </li>
+	</ol>
+      </script>
+      <div ui-tree>
+	<ol ui-tree-nodes="" ng-model="parsed" id="tree-root">
+	  <li ng-repeat="node in parsed" ui-tree-node ng-include="'./nodes_renderer.html'"></li>
+	</ol>
+      </div>
       
     </div>
   </div>
