@@ -16,11 +16,10 @@ module.exports = function(grunt) {
 	    jasmine: {
 		
 		dist: {
-		    src: 'dist/*.js',
+		    src: [ 'services/**/*.js', 'app.js' ],
 		    options: {
 			specs: 'tests/**/*.js',
-			vendor: ['node_modules/angular/angular.js', 'node_modules/angular-mocks/angular-mocks.js'],
-			summary: true
+			vendor: ['node_modules/angular/angular.js', 'node_modules/angular-mocks/angular-mocks.js']
 		    },
 		}
 	    },
@@ -28,8 +27,6 @@ module.exports = function(grunt) {
 	    jshint: {
 		all: [ '*.js', 'services/*.js' ]
 	    },
-
-	    // Task configuration will be written here
 	});
 
     grunt.loadNpmTasks('grunt-contrib-jshint');

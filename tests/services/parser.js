@@ -5,11 +5,8 @@ describe('Unit: Testing Services', function() {
 		
 		beforeEach(function() {
 
-			angular.module('services');
-
 			var injector = angular.injector(['services']);
-			parserService = injector.get('parserService');
-			
+			parserService = injector.get('parserService');			
 		    });
 		
 		it('should contain a parserService', function () {
