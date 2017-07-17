@@ -1,0 +1,16 @@
+This is my solution to the Frontline coding challenge.
+
+With this project, I am aiming to showcase my skills in setting up an AngularJS project, and creating a fully tested service that implements a non-trivial algorithm. The challenge was centered around an algorithm, so I deemed creating a UI that is anything but bare-bones to not be germaine to the project.
+
+The project can be run from http://www.pavelyusim.com/angularTest/
+
+It can also be built and run locally:
+
+npm install
+grunt build
+
+Then run a server from the top level directory
+
+The test cases are in the tests directory. Test cases can be run like this:
+
+grunt unittests
