@@ -66,14 +66,10 @@ describe('Unit: Testing Services', function() {
 			// input has a list with no label
 			var output = parserService.parseLabels(['(', 'field1', '(', 'field2', ')', '(','field2', ')', ')']);
 			expect(output).toEqual(null);
-		    });
 
-		it('tokenize and parse', function () {
-			
-			// input has a list that is nested four deep
-			var tokens = parserService.tokenizeLabels('(field1 (field2(field3 (field4, field5(field6 )))) )');
+			var input = ['(', 'field1', '(', 'field2', '(', 'field3', '(', 'field4', 'field5', '(', 'field6', ')', ')' ,')' ,')', ')'];
 
-			var output = parserService.parseLabels(tokens);
+			var output = parserService.parseLabels(input);
 
 			var expected = [ { label: 'field1', 
 					   nodes: [ { label: 'field2', 
