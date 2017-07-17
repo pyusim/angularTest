@@ -1,55 +1,88 @@
 describe('Unit: Testing Services', function() {
 	describe('Parser Service:', function() {
+	       
+		var parserService;		
 		
 		beforeEach(function() {
 
 			angular.module('services');
+
+			var injector = angular.injector(['services']);
+			parserService = injector.get('parserService');
+			
 		    });
 		
 		it('should contain a parserService', function () {
 			
-			var injector = angular.injector(['services']);
-			var parserService = injector.get('parserService');
 			expect(parserService).not.toEqual(null);
 		    });
 		
 		it('tokenize', function () {
 			
-			var injector = angular.injector(['services']);
-			var parserService = injector.get('parserService');
-			
-			var input = '(id,created,employee(id,firstname,employeeType(id), lastname),location)';
+			// input is null
+			var output = parserService.tokenizeLabels(null);
+			expect(output).toEqual(null);
 
-			var expected = ['(', 'id', 'created', 
-					'employee', '(', 'id', 'firstname', 'employeeType', '(', 'id', ')',
-					'lastname', ')', 'location', ')'];
-			
-			console.log(input);
+			// input is not a string
+			var output = parserService.tokenizeLabels({});
+			expect(output).toEqual(null);
 
-			var output = parserService.tokenizeLabels(input);		      
-			
-			expect(output).toEqual(expected);
+			// input is empty string
+			output = parserService.tokenizeLabels('');
+			expect(output).toEqual([]);
+
+			// input has fields with spaces and is not trimmed
+			output = parserService.tokenizeLabels('   field1, field with a space(        ');
+			expect(output).toEqual(['field1', 'field with a space', '(']);
+
+			// input has only delimiters and empty fields
+			output = parserService.tokenizeLabels(',(,(),');
+			expect(output).toEqual(['(', '(', ')']);
 		    });
 
 		it('parse', function () {
 			
-			var injector = angular.injector(['services']);
-			var parserService = injector.get('parserService');
-			
-			var input = ['(', 'id', 'created', 
-					'employee', '(', 'id', 'firstname', 'employeeType', '(', 'id', ')',
-					'lastname', ')', 'location', ')'];
+			// input is null
+			var output = parserService.parseLabels(null);
+			expect(output).toEqual(null);
 
-			var expected = [ { label: 'id' }, 
-					 { label: 'created' }, 
-					 { label: 'employee',
-					   nodes : [ {label : 'id'}, {label : 'firstname'}, { label : 'employeeType', 
-											      nodes : [ { label: 'id' } ] }, { label: 'lastname' } ] },
-					 { label: 'location' } ];					       
+			// input is not an array
+			var output = parserService.parseLabels({});
+			expect(output).toEqual(null);
 
-			console.log(input);
+			// input is an empty array
+			var output = parserService.parseLabels([]);
+			expect(output).toEqual(null);
+
+			// input is an empty list
+			var output = parserService.parseLabels(['(', ')']);
+			expect(output).toEqual([]);
+
+			// input has an unmatched parenthesis
+			var output = parserService.parseLabels(['(', 'field1', '(', 'field2', ')']);
+			expect(output).toEqual(null);
+
+			// input starts with a list 
+			var output = parserService.parseLabels(['(', '(', ')' ,'field2', ')']);
+			expect(output).toEqual(null);
+
+			// input has a list with no label
+			var output = parserService.parseLabels(['(', 'field1', '(', 'field2', ')', '(','field2', ')', ')']);
+			expect(output).toEqual(null);
+		    });
+
+		it('tokenize and parse', function () {
 			
-			var output = parserService.parseLabels(input);		      
+			// input has a list that is nested four deep
+			var tokens = parserService.tokenizeLabels('(field1 (field2(field3 (field4, field5(field6 )))) )');
+
+			var output = parserService.parseLabels(tokens);
+
+			var expected = [ { label: 'field1', 
+					   nodes: [ { label: 'field2', 
+						      nodes: [ {label: 'field3', 
+								nodes: [ { label : 'field4'}, { label: 'field5', 
+												nodes: [ { label: 'field6'}  ] } ] } ] } ] } ];
 			
 			expect(output).toEqual(expected);
 		    });

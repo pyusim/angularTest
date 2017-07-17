@@ -56,18 +56,21 @@ angular.module('services', []).
 
 			return acc;
 
-		    }, [[]]).filter(function (token) { // git rid of all the empty tokens that reduce generated
-
-			    return token.length > 0;
-			    
-			}).map(function(token) { // turn arrays of charactes into strings
+		    }, [[]]).map(function(token) { // turn arrays of charactes into strings
 				
-				return token.join('').trim();
+			    return token.join('').trim();
+			}).filter(function (token) { // git rid of all the empty tokens that reduce generated
+				
+				return token.length > 0;			    
 			    });
 	    };
 	    
 	    // Wrapper around local parseLabels - see the comment there for more information
 	    that.parseLabels = function(tokens, compareFunction) {
+
+		if (!tokens) return null;
+
+		if (!Array.isArray(tokens)) return null;
 
 		return parseLabels(tokens.slice(), compareFunction);
 	    };
@@ -80,11 +83,11 @@ angular.module('services', []).
 	    //  input -  "(id,employee(id),location)" 
 	    //  output - [ { label: 'id' }, { label: 'employee', nodes : [ { label: 'id' } ] }, { label: 'location' } ]
 	    //	    
+	    // This function modifies tokens, so it is not part of the service's API
+	    // 
+	    // All syntax errors result in a return value of null
+	    //
 	    var parseLabels = function(tokens, compareFunction) {
-
-		if (!tokens) return null;
-
-		if (!Array.isArray(tokens)) return null;
 
 		// A well-formed structure has to be surrounded by parenthesis
 		if (tokens[0] !== delims.listStart) return null;
@@ -100,6 +103,12 @@ angular.module('services', []).
 		    if (tokens[0] === delims.listStart) {
 
 			// a new list - the results of recursive call are put into nodes
+
+			// these two checks cover lists without nodes
+			if (result.length === 0) return null;
+
+			if (result[result.length-1].nodes) return null;
+
 			result[result.length-1].nodes = parseLabels(tokens, compareFunction);
 
 		    } else if (tokens[0] === delims.listEnd) {
