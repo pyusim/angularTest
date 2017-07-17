@@ -18,12 +18,12 @@ app.controller('mainController', ['$scope', 'parserService', function($scope, pa
 	    $scope.tokenizeAndParse = function () {
 		this.tokens = parserService.tokenizeLabels($scope.input);
 		$scope.parse();
-	    }
+	    };
 
 	    $scope.parse = function () {
 
 		$scope.parsed = parserService.parseLabels(this.tokens, $scope.sorted ? compare : null);
-	    }
+	    };
 
 	    $scope.tokenizeAndParse();
 	}]);
